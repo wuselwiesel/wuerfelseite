@@ -38,11 +38,11 @@
         <input id="bonus-value" type="number" value="0" />
       </div>
       <div class="input-row">
-        <label for="difficulty-value">Schwierigkeitsgrad:</label>
-        <select id="difficulty-value">
+        <label for="difficulty-select">Schwierigkeitsgrad:</label>
+        <select id="difficulty-select">
           <option value="10">Sehr leicht</option>
-          <option value="15">Leicht</option>
-          <option value="20" selected>Normal</option>
+          <option value="15" selected>Leicht</option>
+          <option value="20">Normal</option>
           <option value="25">Schwer</option>
           <option value="30">Sehr schwer</option>
         </select>
@@ -60,7 +60,9 @@
     <ul id="history" role="list"></ul>
   </section>
 
+  <!-- Socket.IO und Script -->
   <script src="/socket.io/socket.io.js"></script>
-  <script src="script.js"></script>
+  <script type="module" src="/script.js"></script>
+
 </body>
 </html>
