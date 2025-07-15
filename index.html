@@ -1,61 +1,66 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Online Dice</title>
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Online Dice</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<h1>Online Dice</h1>
+  <h1>Online Dice</h1>
 
-<div id="control-top">
-  <input id="username" type="text" placeholder="Dein Name eingeben..." maxlength="20" />
-  <select id="dice-type" aria-label="Würfeltyp auswählen">
-    <option value="d2">d2 (Ja / Nein)</option>
-    <option value="d6">d6</option>
-    <option value="d10">d10</option>
-    <option value="d20" selected>d20</option>
-  </select>
-  <button id="roll">🎲 Würfeln</button>
-</div>
-
-<div id="main-container">
-  <div id="dice-container">
-    <img id="current-result" src="https://cdn.glitch.global/c8aaad5e-0231-4972-83e1-a4a50eee8024/1.png?v=1751444165186" alt="Würfelergebnis" />
-    <section id="check-result" aria-live="polite" role="status" class="result-check"></section>
+  <div id="control-top">
+    <input id="username" type="text" placeholder="Charaktername" maxlength="20" />
+    <select id="dice-type" aria-label="Würfeltyp auswählen">
+      <option value="d2">d2 (Ja / Nein)</option>
+      <option value="d6">d6</option>
+      <option value="d10">d10</option>
+      <option value="d20" selected>d20</option>
+    </select>
+    <button id="roll">🎲 Würfeln</button>
   </div>
 
-  <section id="attribut-section" aria-label="Attributswerte eingeben">
-    <h2>Attributswerte</h2>
-    <div class="input-row">
-      <label for="attribute-value">Attributswert:</label>
-      <input id="attribute-value" type="number" value="0" />
+  <div id="main-container">
+    <div id="dice-container">
+      <img id="current-result" src="https://cdn.glitch.global/c8aaad5e-0231-4972-83e1-a4a50eee8024/1.png?v=1751444165186" alt="Würfelergebnis" />
+      <section id="check-result" aria-live="polite" role="status" class="result-check"></section>
     </div>
-    <div class="input-row">
-      <label for="bonus-value">Bonus:</label>
-      <input id="bonus-value" type="number" value="0" />
-    </div>
-    <div class="input-row">
-      <label for="difficulty-value">Schwierigkeitsgrad:</label>
-      <input id="difficulty-value" type="number" value="10" />
-    </div>
+
+    <section id="attribut-section" aria-label="Attributswerte eingeben">
+      <h2>Attributswerte</h2>
+      <div class="input-row">
+        <label for="attribute-value">Attributswert:</label>
+        <input id="attribute-value" type="number" value="0" />
+      </div>
+      <div class="input-row">
+        <label for="bonus-value">Bonus:</label>
+        <input id="bonus-value" type="number" value="0" />
+      </div>
+      <div class="input-row">
+        <label for="difficulty-value">Schwierigkeitsgrad:</label>
+        <select id="difficulty-value">
+          <option value="10">Sehr leicht</option>
+          <option value="15">Leicht</option>
+          <option value="20" selected>Normal</option>
+          <option value="25">Schwer</option>
+          <option value="30">Sehr schwer</option>
+        </select>
+      </div>
+    </section>
+  </div>
+
+  <section aria-label="Verbundene Spieler" id="players-section">
+    <h2>Online Spieler</h2>
+    <div id="players-list"></div>
   </section>
-</div>
 
-<section aria-label="Verbundene Spieler" id="players-section">
-  <h2>Online Spieler</h2>
-  <div id="players-list"></div>
-</section>
+  <section aria-label="Würfel Verlauf" id="history-section">
+    <h2>Letzte Ergebnisse (Live)</h2>
+    <ul id="history" role="list"></ul>
+  </section>
 
-<section aria-label="Würfel Verlauf" id="history-section">
-  <h2>Letzte Ergebnisse (Live)</h2>
-  <ul id="history" role="list"></ul>
-</section>
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="script.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
