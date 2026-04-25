@@ -124,7 +124,7 @@ function renderHistory() {
     const username = item.username || 'Unbekannt';
     const status = item.success !== undefined ? (item.success ? 'Geschafft' : 'Nicht geschafft') : '';
     const statusDisplay = status ?  - ${status} : '';
-    li.innerHTML = <strong>${username}</strong> - ${item.diceType}: ${item.result}${statusDisplay};
+    li.innerHTML = `<strong>${username}</strong> - ${item.diceType}: ${item.result}${statusDisplay}`;
     
     // Add color coding for success/failure
     if (item.success === true) {
