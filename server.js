@@ -13,25 +13,25 @@ const io = socketIo(server, {
   }
 });
 
-// =========================
-// STATIC FILES
-// =========================
+// ==========================
+// STATIC FILES (WICHTIG)
+// ==========================
 
-// Wichtig: muss auf deinen Build-Ordner zeigen
-app.use(express.static(path.join(__dirname, 'dist')));
+// 👉 KEIN dist mehr verwenden
+app.use(express.static(path.join(__dirname)));
 
-// =========================
+// ==========================
 // SPA FALLBACK (FIXED)
-// =========================
+// ==========================
 
-// ❗ FIX: '*' ist in Node 22 problematisch → '/*' benutzen
+// alle Routen führen zu index.html
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// =========================
+// ==========================
 // MULTIPLAYER LOGIC
-// =========================
+// ==========================
 
 let connectedPlayers = new Map();
 let recentRolls = [];
@@ -70,9 +70,9 @@ io.on('connection', (socket) => {
   });
 });
 
-// =========================
+// ==========================
 // START SERVER
-// =========================
+// ==========================
 
 const PORT = process.env.PORT || 10000;
 
