@@ -123,7 +123,7 @@ function renderHistory() {
     const li = document.createElement('li');
     const username = item.username || 'Unbekannt';
     const status = item.success !== undefined ? (item.success ? 'Geschafft' : 'Nicht geschafft') : '';
-    const statusDisplay = status ?  - ${status} : '';
+    const statusDisplay = status ? ` - ${status}` : '';
     li.innerHTML = `<strong>${username}</strong> - ${item.diceType}: ${item.result}${statusDisplay}`;
     
     // Add color coding for success/failure
@@ -148,7 +148,7 @@ function rollDice() {
   const rolled = diceArray[rollIndex];
 
   currentResultImg.src = rolled.url;
-  currentResultImg.alt = Würfelergebnis: ${rolled.name || rolled.num};
+  currentResultImg.alt = `Würfelergebnis: ${rolled.name || rolled.num}`;
 
   // Berechnung: Attribut + Bonus + Würfelergebnis (als Zahl)
   const attributeValue = Number(attrValueInput.value) || 0;
