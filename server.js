@@ -7,36 +7,42 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Static files (index.html, script.js, images, etc.)
+// ---------------- STATIC FILES ----------------
+// Wichtig: Root richtig setzen, damit /images etc. funktionieren
 app.use(express.static(__dirname));
 
-// SPA fallback
-app.get("/*", (req, res) => {
+// ---------------- ROUTING FIX (WICHTIG) ----------------
+// KEIN "/*" mehr → das crashte auf Node 22 + Render
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// ---------------- SOCKET ----------------
+// ---------------- MULTIPLAYER ----------------
 
 let connectedPlayers = new Map();
 let recentRolls = [];
 
 io.on("connection", (socket) => {
-  console.log("connected:", socket.id);
+  console.log("Player connected:", socket.id);
 
+  // Spieler joinen
   socket.on("player-join", (username) => {
     connectedPlayers.set(socket.id, username || "Unbekannt");
+
     io.emit("players-update", Array.from(connectedPlayers.values()));
+
     socket.emit("recent-rolls", recentRolls);
   });
 
-  socket.on("dice-roll", (data) => {
+  // Würfeln
+  socket.on("dice-roll", (rollData) => {
     const username = connectedPlayers.get(socket.id) || "Unbekannt";
 
     const rollInfo = {
       username,
-      diceType: data.diceType,
-      result: data.result,
-      success: data.success,
+      diceType: rollData.diceType,
+      result: rollData.result,
+      success: rollData.success,
       timestamp: new Date().toLocaleTimeString()
     };
 
@@ -46,13 +52,17 @@ io.on("connection", (socket) => {
     io.emit("new-roll", rollInfo);
   });
 
+  // Disconnect
   socket.on("disconnect", () => {
     connectedPlayers.delete(socket.id);
     io.emit("players-update", Array.from(connectedPlayers.values()));
   });
 });
 
+// ---------------- START SERVER ----------------
+
 const PORT = process.env.PORT || 10000;
+
 server.listen(PORT, () => {
-  console.log("Server läuft auf Port", PORT);
+  console.log(`Server läuft auf Port ${PORT}`);
 });
