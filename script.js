@@ -1,7 +1,7 @@
 const diceData = {
  d2: [
-  {name: "Ja", url: "/images/d2_1.png"},
-  {name: "Nein", url: "/images/d2_2.png"}
+  {name: "Ja", url: "/images/d2_ja.png"},
+  {name: "Nein", url: "/images/d2_nein.png"}
 ],
   d6: [
   {num: 1, url: "/images/d6_1.png"},
