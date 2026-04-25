@@ -5,6 +5,7 @@ const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
+
 const io = socketIo(server, {
   cors: {
     origin: "*",
@@ -12,15 +13,26 @@ const io = socketIo(server, {
   }
 });
 
-// ⚠️ Statische Dateien korrekt aus dist laden:
+// =========================
+// STATIC FILES
+// =========================
+
+// Wichtig: muss auf deinen Build-Ordner zeigen
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Fallback für SPA (damit index.html bei Direktaufrufen funktioniert)
-app.get('*', (req, res) => {
+// =========================
+// SPA FALLBACK (FIXED)
+// =========================
+
+// ❗ FIX: '*' ist in Node 22 problematisch → '/*' benutzen
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-// Multiplayer-Logik
+// =========================
+// MULTIPLAYER LOGIC
+// =========================
+
 let connectedPlayers = new Map();
 let recentRolls = [];
 
@@ -29,12 +41,14 @@ io.on('connection', (socket) => {
 
   socket.on('player-join', (username) => {
     connectedPlayers.set(socket.id, username);
+
     io.emit('players-update', Array.from(connectedPlayers.values()));
     socket.emit('recent-rolls', recentRolls);
   });
 
   socket.on('dice-roll', (rollData) => {
     const username = connectedPlayers.get(socket.id) || 'Unbekannt';
+
     const rollInfo = {
       username,
       diceType: rollData.diceType,
@@ -43,8 +57,10 @@ io.on('connection', (socket) => {
       timestamp: new Date().toLocaleTimeString(),
       socketId: socket.id
     };
+
     recentRolls.unshift(rollInfo);
     if (recentRolls.length > 8) recentRolls.pop();
+
     io.emit('new-roll', rollInfo);
   });
 
@@ -54,7 +70,12 @@ io.on('connection', (socket) => {
   });
 });
 
+// =========================
+// START SERVER
+// =========================
+
 const PORT = process.env.PORT || 10000;
+
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server läuft auf Port ${PORT}`);
 });
